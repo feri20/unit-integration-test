@@ -4,7 +4,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecification {
     public static Specification<Product> hasPrice(Long price){
-        if(price!=null){
+        if(price!=0){
             return(root,query,cb)->cb.equal(root.get("price"),price);
         }
         return (root,query,cb)-> cb.conjunction();
@@ -28,6 +28,9 @@ public class ProductSpecification {
             return (root,query,cb)-> cb.like(root.get("name"),"%"+code+"%");
         }
         return (root,query,cb)-> cb.conjunction();
+    }
+
+    private ProductSpecification() {
     }
 }
 

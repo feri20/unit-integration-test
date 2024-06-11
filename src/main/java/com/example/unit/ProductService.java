@@ -28,13 +28,14 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        return repository.getReferenceById(id);
+        Optional<Product> product = repository.findById(id);
+       return product.orElseThrow(()->new EntityNotFoundException("there is no product with provided id"));
+
     }
 
     public Product save(Product product) {
         return repository.save(product);
     }
-
 
     public Product update(Long id, Product product) {
         Optional<Product> optionalProduct = repository.findById(id);
