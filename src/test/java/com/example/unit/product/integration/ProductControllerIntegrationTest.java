@@ -7,16 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,8 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductControllerIntegrationTest {
-
-    private final static Logger logger = LoggerFactory.getLogger(ProductControllerIntegrationTest.class);
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -70,7 +63,6 @@ class ProductControllerIntegrationTest {
     void getAll() throws Exception {
         Product secondTestProduct =  new Product(2L,"second","345",3500L,3);
         repository.save(secondTestProduct);
-        List<Product> products = repository.findAll();
         mockMvc.perform(get("/api").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -99,20 +91,17 @@ class ProductControllerIntegrationTest {
 
     @Test
     void filter() throws Exception {
-        FilterRequest request =  new FilterRequest("first","123",2500L,2);
+        FilterRequest request =  new FilterRequest("first","123",0L,0);
         String json = objectMapper.writeValueAsString(request);
-        List<Product> products = repository.findAll();
         mockMvc.perform(get("/api/filter")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                .andExpect(status().isOk())
-               .andDo(MockMvcResultHandlers.print());
-
-//               .andExpect(jsonPath("$.[0].id").value(1L));
-//               .andExpect(jsonPath("$.[0].name").value("first"))
-//               .andExpect(jsonPath("$.[0].code").value("123"))
-//               .andExpect(jsonPath("$.[0].price").value(2500L))
-//               .andExpect(jsonPath("$.[0].rank").value(2));
+               .andExpect(jsonPath("$.[0].id").value(1L))
+               .andExpect(jsonPath("$.[0].name").value("first"))
+               .andExpect(jsonPath("$.[0].code").value("123"))
+               .andExpect(jsonPath("$.[0].price").value(2500L))
+               .andExpect(jsonPath("$.[0].rank").value(2));
 
     }
 

@@ -67,7 +67,7 @@ class ProductServiceIntegrationTest {
     void filterProducts() {
         repository.save(new Product("first", "123", 2500L, 3));
         repository.save(new Product("second", "456", 3500L, 4));
-        FilterRequest request = new FilterRequest("second","",0L,0);
+        FilterRequest request = new FilterRequest("second","456" ,3500L,4);
         List<Product> products = service.filterProduct(request);
         assertFalse(products.isEmpty());
         assertEquals(3500L,products.get(0).getPrice());

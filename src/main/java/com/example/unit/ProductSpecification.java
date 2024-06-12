@@ -25,7 +25,7 @@ public class ProductSpecification {
 
     public static Specification<Product> hasCode(String code){
         if(code!=null && !code.isEmpty()){
-            return (root,query,cb)-> cb.like(root.get("name"),"%"+code+"%");
+            return (root,query,cb)-> cb.like(root.get("code"),"%"+code+"%");
         }
         return (root,query,cb)-> cb.conjunction();
     }
