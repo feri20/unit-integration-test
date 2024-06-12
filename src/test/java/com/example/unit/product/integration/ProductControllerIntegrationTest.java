@@ -91,6 +91,7 @@ class ProductControllerIntegrationTest {
 
     @Test
     void filter() throws Exception {
+        repository.save(new Product(2L,"second","345",3500L,3));
         FilterRequest request =  new FilterRequest("first","123",0L,0);
         String json = objectMapper.writeValueAsString(request);
         mockMvc.perform(get("/api/filter")
