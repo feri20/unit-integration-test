@@ -4,14 +4,12 @@ import com.example.unit.FilterRequest;
 import com.example.unit.Product;
 import com.example.unit.ProductRepository;
 import com.example.unit.ProductService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -22,10 +20,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-@SpringBootTest
+
 @ExtendWith(MockitoExtension.class)
 class ProductServiceUnitTest {
-    @MockBean
+    @Mock
     private ProductRepository repository;
     @InjectMocks
     private ProductService productService;
@@ -58,7 +56,7 @@ class ProductServiceUnitTest {
     @Test
     void getById() {
         Product firstTestProduct =  new Product(1L,"first","123",2500L,2);
-        when(repository.getReferenceById(1L)).thenReturn(firstTestProduct);
+        when(repository.findById(1L)).thenReturn(Optional.of(firstTestProduct));
         Product product = productService.getById(1L);
         assertNotNull(product);
         assertEquals(product,firstTestProduct);

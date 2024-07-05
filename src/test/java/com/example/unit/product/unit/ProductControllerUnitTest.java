@@ -5,8 +5,9 @@ import com.example.unit.Product;
 import com.example.unit.ProductController;
 import com.example.unit.ProductService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ProductControllerUnitTest {
-
     @MockBean
     private ProductService productService;
-
-    @Autowired
+    @InjectMocks
     private ProductController productController;
-
-
     @Test
     void filter(){
         Product firstTestProduct = new Product(1L,"test1","123",2500L,3);

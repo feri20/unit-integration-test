@@ -1,5 +1,6 @@
 package com.example.unit;
 
+import com.example.unit.javacore.TestCore;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,6 +33,11 @@ public class ProductService {
        return product.orElseThrow(()->new EntityNotFoundException("there is no product with provided id"));
 
     }
+    public Product getByCode(String code) {
+        Optional<Product> product = repository.findByCode(code);
+        return product.orElse(null);
+
+    }
 
     public Product save(Product product) {
         return repository.save(product);
@@ -62,6 +68,11 @@ public class ProductService {
                 new EntityNotFoundException("the product you are trying to delete does not exist"));
         repository.delete(product);
         return id;
+    }
+
+    private String getMessage(){
+        TestCore testCore = new TestCore();
+        return testCore.notifyMe();
     }
 
 }
