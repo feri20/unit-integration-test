@@ -1,9 +1,7 @@
 package com.example.unit;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -14,17 +12,16 @@ public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // @Column(name = "product_id", updatable = false, unique = true)
     private Long id;
 
-    @Column
+    @Column(name = "product_name", unique = true)
     private String name;
 
     @Column
     private String code;
 
     @Column
-    private Long price;
+    private long price;
 
     @Column
     private int rank;

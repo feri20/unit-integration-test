@@ -1,8 +1,8 @@
 package com.example.unit;
 
-import com.example.unit.javacore.TestCore;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +30,10 @@ public class ProductService {
 
     public Product getById(Long id) {
         Optional<Product> product = repository.findById(id);
-       return product.orElseThrow(()->new EntityNotFoundException("there is no product with provided id"));
+        return product.orElseThrow(() -> new EntityNotFoundException("there is no product with provided id"));
 
     }
+
     public Product getByCode(String code) {
         Optional<Product> product = repository.findByCode(code);
         return product.orElse(null);
@@ -40,7 +41,11 @@ public class ProductService {
     }
 
     public Product save(Product product) {
-        return repository.save(product);
+        try {
+            return repository.save(product);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DataIntegrityViolationException("this product already defined: " + product.getName());
+        }
     }
 
     public Product update(Long id, Product product) {
@@ -60,19 +65,14 @@ public class ProductService {
 
     public Product findByName(String name) {
         Optional<Product> product = repository.findByName(name);
-        return product.orElseThrow(()->new EntityNotFoundException("there is no product with this name"));
+        return product.orElseThrow(() -> new EntityNotFoundException("there is no product with this name"));
     }
 
-    public Long delete(Long id){
-        Product product = repository.findById(id).orElseThrow(()->
+    public Long delete(Long id) {
+        Product product = repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("the product you are trying to delete does not exist"));
         repository.delete(product);
         return id;
-    }
-
-    private String getMessage(){
-        TestCore testCore = new TestCore();
-        return testCore.notifyMe();
     }
 
 }
