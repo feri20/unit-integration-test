@@ -1,6 +1,7 @@
 package com.example.unit;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Product>> filter(FilterRequest request) {
+    public ResponseEntity<Page<Product>> filter(FilterRequest request) {
         return ResponseEntity.ok(service.filterProduct(request));
     }
     @GetMapping("/by-name")

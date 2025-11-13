@@ -12,6 +12,9 @@ public class FilterRequest {
     private String code;
     private Long price;
     private int rank;
+    private int page;
+    private int size;
+    private String direction;
 
 
 }

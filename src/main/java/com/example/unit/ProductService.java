@@ -1,14 +1,19 @@
 package com.example.unit;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+
 
 @Service
 @AllArgsConstructor
@@ -16,13 +21,17 @@ public class ProductService {
 
     private ProductRepository repository;
 
-    public List<Product> filterProduct(FilterRequest request) {
+    public Page<Product> filterProduct(FilterRequest request) {
         Specification<Product> spec = Specification.where(ProductSpecification.hasPrice(request.getPrice())
                 .and(ProductSpecification.hasName(request.getName()))
                 .and(ProductSpecification.hasCode(request.getCode()))
                 .and(ProductSpecification.hasRank(request.getRank())));
-
-        return repository.findAll(spec);
+        Pageable pageable = PageRequest.of(
+                request.getPage(),
+                request.getSize(),
+                Sort.by(Sort.Direction.fromString(request.getDirection()),"price" )
+        );
+        return repository.findAll(spec,pageable);
     }
 
     public List<Product> getAll() {

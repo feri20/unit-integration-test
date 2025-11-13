@@ -9,6 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -27,10 +31,13 @@ class ProductControllerUnitTest {
     private ProductController productController;
     @Test
     void filter(){
+
         Product firstTestProduct = new Product(1L,"test1","123",2500L,3);
-        FilterRequest request = new FilterRequest("","123",null,0);
-        when(productService.filterProduct(request)).thenReturn(List.of(firstTestProduct));
-        ResponseEntity<List<Product>> response = productController.filter(request);
+        FilterRequest request = new FilterRequest("","123",null,0,0,10,"ASC");
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Page<Product> productPage = new PageImpl<>(List.of(firstTestProduct),pageable,1);
+        when(productService.filterProduct(request)).thenReturn(productPage);
+        ResponseEntity<Page<Product>> response = productController.filter(request);
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(List.of(firstTestProduct),response.getBody());
     }
