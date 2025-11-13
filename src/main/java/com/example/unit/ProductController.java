@@ -15,7 +15,7 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Product>> filter(@RequestBody FilterRequest request) {
+    public ResponseEntity<List<Product>> filter(FilterRequest request) {
         return ResponseEntity.ok(service.filterProduct(request));
     }
     @GetMapping("/by-name")
